@@ -1,5 +1,5 @@
 import './App.css';
-import { Routes, Route, BrowserRouter as Router } from 'react-router-dom';
+import { Routes, Route, HashRouter  as Router } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import AddAlbum from './addAlbum';
