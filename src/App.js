@@ -1,5 +1,5 @@
 import './App.css';
-import { Routes, Route, HashRouter  as Router } from 'react-router-dom';
+import { Routes, Route, BrowserRouter  as Router } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import AddAlbum from './addAlbum';
@@ -11,12 +11,13 @@ const baseUrl = 'https://jsonplaceholder.typicode.com/albums';
 function App() {
   let [albumData, setAlbumData] = useState([]);  //main album data
   let [updateAlbum, setUpdateAlbum] = useState({});  //album which needs to be updated will be stored here
-
-
+  
   // to fetch the albums when the page is first loaded
   useEffect(() => {
-    fetchAlbums();
-   },[]);
+     if(albumData.length===0){
+      fetchAlbums();
+     }
+   },[albumData]);
 
 
   // making an api call to get the album data
@@ -60,17 +61,19 @@ function App() {
 
   // making an api call to update the album
   const updateAlbums = async(id, userId, title, oldAlbum) => {
+    let userid=parseInt(userId);
     const album = {
-      userId: userId,
+      userId: userid,
       id: id,
       title: title,
     };
     await axios.put(`${baseUrl}/${oldAlbum.id}`, album).then((response) => {
       console.log(response);
-      let newAlbums=albumData;
-      let index=newAlbums.findIndex(x => x.id === oldAlbum.id);
+      let newAlbums=[...albumData];
+      let index=newAlbums.findIndex((x)=>x.id===oldAlbum.id);
       newAlbums[index]=response.data;
       setAlbumData(newAlbums);
+      console.log(albumData);
       alert('album changed');
     });
   };
